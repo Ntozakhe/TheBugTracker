@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TheBugTracker.Data;
 using TheBugTracker.Models;
+using TheBugTracker.Services;
+using TheBugTracker.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,11 @@ builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.Req
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+builder.Services.AddScoped<IBTRolesService, BTRolesService>();
+builder.Services.AddScoped<IBTCompanyInfoService, BTCompanyInfoService>();
+builder.Services.AddScoped<IBTProjectService, BTProjectService>();
+builder.Services.AddScoped<IBTTicketService, BTTicketService>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
