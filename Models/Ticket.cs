@@ -48,6 +48,9 @@ namespace TheBugTracker.Models
         [DisplayName("Archived")]
         public bool Archived { get; set; }
 
+        [DisplayName("Archived by Project")]
+        public bool ArchivedByProject { get; set; }
+
         //----Navigational Properties-------------------------------
         public virtual Project? Project { get; set; }
         public virtual TicketPriority? TicketPriority { get; set; }
