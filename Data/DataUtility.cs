@@ -23,9 +23,11 @@ namespace TheBugTracker.Data
             var connectionString = configuration.GetSection("pgSettings")["pgConnection"];
             //It will be automatically overwritten if we are running on Heroku/Railway
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            //Your environment variable may have a different name based on the hosting /Azure/AWS
             return string.IsNullOrEmpty(databaseUrl) ? connectionString : BuildConnectionString(databaseUrl);
         }
 
+        //This is specific to postgres
         public static string BuildConnectionString(string databaseUrl)
         {
             //Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.
@@ -39,7 +41,7 @@ namespace TheBugTracker.Data
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = databaseUri.LocalPath.TrimStart('/'),
-                SslMode = SslMode.Prefer,
+                SslMode = SslMode.Prefer, /* or SslMode = SsMode.Require,*/
                 TrustServerCertificate = true
             };
             return builder.ToString();

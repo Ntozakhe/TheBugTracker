@@ -44,6 +44,7 @@ builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailS
 
 var app = builder.Build();
 
+//get the databse update with the latest migrations.
 await DataUtility.ManageDataAsync(app);
 
 
