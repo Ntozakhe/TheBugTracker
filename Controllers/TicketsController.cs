@@ -9,7 +9,6 @@ using TheBugTracker.Models.Enums;
 using TheBugTracker.Models.ViewModels;
 using TheBugTracker.Services.Interfaces;
 
-
 namespace TheBugTracker.Controllers
 {
     [Authorize]
@@ -23,7 +22,12 @@ namespace TheBugTracker.Controllers
         private readonly IBTFileService _fileService;
         private readonly IBTTicketHistoryService _historyService;
 
-        public TicketsController(UserManager<BTUser> userManager, IBTProjectService projectService, IBTLookUpService lookUpService, IBTTicketService ticketService, IBTFileService fileService, IBTTicketHistoryService historyService)
+        public TicketsController(UserManager<BTUser> userManager,
+            IBTProjectService projectService,
+            IBTLookUpService lookUpService,
+            IBTTicketService ticketService,
+            IBTFileService fileService,
+            IBTTicketHistoryService historyService)
         {
 
             _userManager = userManager;
@@ -380,7 +384,7 @@ namespace TheBugTracker.Controllers
             {
                 await _ticketService.ArchiveTicketAsync(ticket);
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AllTickets));
         }
 
         [Authorize(Roles = $"{nameof(Roles.Administrator)},{nameof(Roles.ProjectManager)}")]
@@ -412,7 +416,7 @@ namespace TheBugTracker.Controllers
                 ticket.Archived = false;
                 await _ticketService.UpdateTicketAsync(ticket);
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AllTickets));
         }
 
         private async Task<bool> TicketExists(int id)
@@ -420,5 +424,10 @@ namespace TheBugTracker.Controllers
             int companyId = User.Identity.GetCompanyId().Value;
             return (await _ticketService.GetAllTicketsByCompanyAsync(companyId)).Any(t => t.Id == id);
         }
+
+
+
     }
+
+
 }

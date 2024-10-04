@@ -1,13 +1,93 @@
-﻿@model TheBugTracker.Models.Project
-
+﻿@using TheBugTracker.Services.Interfaces
+@model TheBugTracker.Models.Project
+@inject IBTFileService FileService
 @{
     ViewData["Title"] = "Restore";
 }
 
-<h1>Restore</h1>
 
-<h3>Are you sure you want to Restore this project?</h3>
+
+<h3 class="text-success">Are you sure you want to Restore this project?</h3>
+
+
+
 <div>
+
+    <div class="card shadow border-0 my-4">
+        <div class="card-header bg-secondary bg-gradient text-light py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3 class="d-flex justify-content-center">Restore Project <i class="bi bi-arrow-counterclockwise small"></i></h3>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.Raw(Model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.StartDate)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.EndDate)
+                </dd>
+
+                <dt class="col-sm-2">
+                    Project Image
+                </dt>
+                <dd class="col-sm-10">
+                    @if (Model.ImageFileData != null)
+                    {
+                        <img src="@FileService.ConvertByteArrayToFlie(Model.ImageFileData!, Model.ImageContentType!)" class="square-img rounded-start" width="100px" />
+                    }
+                </dd>
+
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Company)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Company.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ProjectPriority)
+                </dt>
+                <dd class="col-sm-10">
+                    <span class="badge bg-dark">@Model.ProjectPriority!.Name</span>
+                </dd>
+            </dl>
+
+            <form asp-action="Restore">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Restore" class="btn btn-success" />
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+
+@* <div>
     <h4>Project</h4>
     <hr />
     <dl class="row">
@@ -78,4 +158,4 @@
         <input type="submit" value="Restore" class="btn btn-success" /> |
         <a asp-action="Index">Back to List</a>
     </form>
-</div>
+</div> *@

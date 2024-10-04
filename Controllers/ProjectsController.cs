@@ -67,6 +67,7 @@ namespace TheBugTracker.Controllers
             List<Project> projects = await _projectService.GetArchivedProjectsByCompany(companyId);
             return View(projects);
         }
+
         [Authorize(Roles = nameof(Roles.Administrator))]
         public async Task<IActionResult> UnassigendProjects()
         {

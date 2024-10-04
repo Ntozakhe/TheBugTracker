@@ -5,113 +5,225 @@
 
 @inject UserManager<BTUser> UserManager
 @inject IBTProjectService ProjectService
+@inject IBTFileService FileService
 
 @{
     ViewData["Title"] = "AllProjects";
     BTUser btUser = await UserManager.GetUserAsync(User);
 }
 
-<h1>All Projects</h1>
 
-@if (User.IsInRole(nameof(Roles.Administrator)) || User.IsInRole(nameof(Roles.ProjectManager)))
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Archived)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageContentType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProjectPriority)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Archived)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImageFileName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImageFileData)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImageContentType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Company.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
-                </td>
-                <td>
-                    @* a project manager will see all projects but they may not be the PM for that particular project, 
-                    so they should not have access to an edit/restore/archive if they're not the PM' *@
-                    @{
-                        bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
-                        // The current logged in user is the PM for this particular project. 
-                    }
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    @if (User.IsInRole(nameof(Roles.Administrator)) || isProjectPM)
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        @if (item.Archived == true)
+<div>
+    
+    <div class="card shadow border-0 my-4">
+        <div class="card-header bg-secondary bg-gradient text-light py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3 class="text-white text-uppercase">All Projects</h3>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" style="overflow-y:auto;height:600px;">
+                <table class="table table-hover" id="example">
+                    <thead class="">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.StartDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.EndDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Archived)
+                            </th>
+                            <th>
+                                Project Image
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Company)
+                            </th>
+                            <th>
+                                Priority
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
-                            <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.Raw(item.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StartDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EndDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Archived)
+                                </td>
+                                <td>
+                                    @if (item.ImageFileData != null)
+                                    {
+                                        <img src="@FileService.ConvertByteArrayToFlie(item.ImageFileData!, item.ImageContentType!)" class="square-img rounded-start" width="100px" />
+                                    }
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Company.Name)
+                                </td>
+                                <td>
+                                    <span class="badge bg-dark">@item.ProjectPriority.Name</span>
+                                </td>
+
+                                <td>
+                                    @* a project manager will see all projects but they may not be the PM for that particular project,
+                                so they should not have access to an edit/restore/archive if they're not the PM' *@
+                                    @{
+                                        bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+                                        // The current logged in user is the PM for this particular project.
+                                    }
+                                    <a asp-action="Details" asp-route-id="@item.Id"><span class="badge bg-info"><i class="bi bi-binoculars"></i> Details</span></a>
+                                    @if (User.IsInRole(nameof(Roles.Administrator)) || isProjectPM)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id"><span class="badge bg-primary"><i class="bi bi-pencil-square"></i> Edit</span></a>
+                                        @if (item.Archived == true)
+                                        {
+                                            <a asp-action="Restore" asp-route-id="@item.Id"><span class="badge bg-success"><i class="bi bi-arrow-counterclockwise"></i> Restore</span></a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="Archive" asp-route-id="@item.Id"><span class="badge bg-warning"><i class="bi bi-archive"></i> Archive</span></a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
                         }
-                        else
-                        {
-                            <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-                        }
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@* <div class="col-md-12 col">
+    <div class="mt-5 bg-secondary">
+        <div class="card m-1 p-2">
+            <div class="header">
+                <h2 class="d-flex justify-content-center">All Projects</h2>
+            </div>
+            <div class="body">
+                <div class="table-responsive" style="overflow-y:auto;height:600px;">
+                    <table class="table table-hover" id="example">
+                        <thead class="">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.StartDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.EndDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Archived)
+                                </th>
+                                <th>
+                                    Project Image
+                                </th>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Company)
+                                </th>
+                                <th>
+                                    Priority
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.Raw(item.Description)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StartDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EndDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Archived)
+                                    </td>
+                                    <td>
+                                        @if (item.ImageFileData != null)
+                                        {
+                                            <img src="@FileService.ConvertByteArrayToFlie(item.ImageFileData!, item.ImageContentType!)" class="square-img rounded-start" width="100px" />
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Company.Name)
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-dark">@item.ProjectPriority.Name</span>
+                                    </td>
+
+                                    <td>
+                                        @* a project manager will see all projects but they may not be the PM for that particular project,
+                                    so they should not have access to an edit/restore/archive if they're not the PM' 
+                                        @{
+                                            bool isProjectPM = (await ProjectService.GetProjectManagerAsync(item.Id))?.Id == btUser.Id;
+                                            // The current logged in user is the PM for this particular project.
+                                        }
+                                        <a asp-action="Details" asp-route-id="@item.Id"><span class="badge bg-info"><i class="bi bi-binoculars"></i> Details</span></a> 
+                                        @if (User.IsInRole(nameof(Roles.Administrator)) || isProjectPM)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id"><span class="badge bg-primary"><i class="bi bi-pencil-square"></i> Edit</span></a>
+                                            @if (item.Archived == true)
+                                            {
+                                                <a asp-action="Restore" asp-route-id="@item.Id"><span class="badge bg-success"><i class="bi bi-arrow-counterclockwise"></i> Restore</span></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Archive" asp-route-id="@item.Id"><span class="badge bg-warning"><i class="bi bi-archive"></i> Archive</span></a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div> *@
