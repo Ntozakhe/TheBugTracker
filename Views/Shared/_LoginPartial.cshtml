@@ -10,10 +10,25 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="28" height="28" class="rounded-circle">
-            <span class="d-none d-sm-inline mx-1">@btUser.FirstName</span>
-           
+            @if (btUser.AvatarFileData != null)
+            {
+                <img src="data:image/*;base64,@(Convert.ToBase64String(btUser.AvatarFileData))" alt="" width="28" height="28" class="rounded-circle">
+
+            }
+            else
+            {
+                <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="" width="28" height="28" class="rounded-circle">
+
+            }
+
+            <strong>@btUser.FullName</strong>
+         
+
         </a>
+        <span class="text-muted" style="font-size:x-small;">
+            <strong class="text-light d-flex justify-content-center">@btUser.Company!.Name</strong>
+        </span>
+      
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
             <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a></li>
             <li>

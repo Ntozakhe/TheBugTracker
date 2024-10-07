@@ -92,7 +92,7 @@ namespace TheBugTracker.Data
             try
             {
                 IList<Company> defaultcompanies = new List<Company>() {
-                    new Company() { Name = "Company1", Description="This is default Company 1" },
+                    new Company() { Name = "EgoShift Technologies", Description="Junior Development: Providing work experience for entry level developers." },
                     new Company() { Name = "Company2", Description="This is default Company 2" },
                     new Company() { Name = "Company3", Description="This is default Company 3" },
                     new Company() { Name = "Company4", Description="This is default Company 4" },
@@ -104,7 +104,7 @@ namespace TheBugTracker.Data
                 await context.SaveChangesAsync();
 
                 //Get company Ids
-                company1Id = context.Companies.FirstOrDefault(p => p.Name == "Company1").Id;
+                company1Id = context.Companies.FirstOrDefault(p => p.Name == "EgoShift Technologies").Id;
                 company2Id = context.Companies.FirstOrDefault(p => p.Name == "Company2").Id;
                 company3Id = context.Companies.FirstOrDefault(p => p.Name == "Company3").Id;
                 company4Id = context.Companies.FirstOrDefault(p => p.Name == "Company4").Id;
@@ -228,8 +228,8 @@ namespace TheBugTracker.Data
             {
                 UserName = "btadmin1@bugtracker.com",
                 Email = "btadmin1@bugtracker.com",
-                FirstName = "Bill",
-                LastName = "Appuser",
+                FirstName = "Kenny",
+                LastName = "Ntozakhe",
                 EmailConfirmed = true,
                 CompanyId = company1Id
             };

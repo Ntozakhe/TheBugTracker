@@ -1,6 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using TheBugTracker.Data
 @using TheBugTracker.Models.Enums
 @inject SignInManager<BTUser> SignInManager
+
+
+
+    @inject UserManager<BTUser> UserManager
+@inject ApplicationDbContext Context
+
+@{
+    BTUser bTUser = await UserManager.GetUserAsync(User);
+    // var company = bTUser.Company.Name;
+    if (bTUser != null)
+    {
+        var company = Context.Companies.FirstOrDefault(c => c.Id == bTUser.CompanyId);
+    }
+
+}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +39,7 @@
             <div class="col-12 col-sm-3 col-xl-2 px-sm-2 px-0 bg-secondary d-flex sticky-top">
                 <div class="d-flex flex-sm-column flex-row flex-grow-1 align-items-center align-items-sm-start px-3 pt-2 text-light">
                     <a href="/" class="d-flex align-items-center pb-sm-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <img src="~/img/Bug Tracker.png" class="img-fluid rounded-start" />
+                    BugTracker Application
                     </a>
                     <partial name="_LoginPartial" />
 
@@ -34,10 +51,25 @@
                                     <i class="fs-5 bi-house"></i><span class="ms-1 d-none d-sm-inline">Home</span>
                                 </a>
                             </li>
-                            <li>
-                                <a asp-area="" asp-controller="Companies" asp-action="Index" class="nav-link text-light px-sm-0 px-2">
+                        
+                            <li class="dropdown">
+                                <a class="text-light" asp-area="" asp-controller="Companies" asp-action="Index" class="nav-link dropdown-toggle px-sm-0 px-2" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fs-5 bi-building"></i><span class="ms-1 d-none d-sm-inline">Company</span>
                                 </a>
+                                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdown">
+
+                                    @if(bTUser != null){
+                                        var company = Context.Companies.FirstOrDefault(c => c.Id == bTUser.CompanyId);
+
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Companies" asp-action="Details" asp-route-id="@company.Id"><span>&#10609</span>Details</a></li>
+
+                                    }
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="ManageUserRoles"><span>&#10609</span>Users & Roles</a></li>
+
+
+                                    
+                                    
+                                </ul>
                             </li>
                             <li class="dropdown">
                                 <a class="text-light" asp-area="" asp-controller="Projects" asp-action="Index" class="nav-link dropdown-toggle px-sm-0 px-2" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -91,9 +123,22 @@
                 <main class="row">
                     @RenderBody()
                 </main>
-                <footer class="row bg-light py-4 mt-auto">
-                    <div class="container">
-                        &copy; 2021 - TheBugTracker - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <footer class="container bg-light py-4 mt-auto">
+                    <div class="row">
+                        <div class="col-6">
+                            <span>&copy;@DateTime.Now.ToString("yyyy MMMM")</span> <a target="_blank" href="https://kenny-ntozakhe.netlify.app/">Kenny Ntozakhe</a>
+                           
+                        </div>
+                        
+                        <div class="col-6">
+                            <a href="https://www.linkedin.com/in/kenny-ntozakhe/" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
+                            <a href="#" target="_blank" rel="noopener noreferrer">
+                                <i class="bi bi-briefcase-fill"></i>
+                            </a>
+                            <a href="https://kenny-ntozakhe.netlify.app/#contact-area" target="_blank" rel="noopener noreferrer"><i class="bi bi-envelope"></i></a>
+                            <a href="#" target="_blank" rel="noopener noreferrer"><i class="bi bi-twitter"></i></a>
+                            <a href="https://github.com/Ntozakhe" target="_blank" rel="noopener noreferrer"><i class="bi bi-github" "></i></a>
+                        </div>
                     </div>
                 </footer>
             </div>
@@ -112,7 +157,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("scripts", required: false)
 </body>
 </html>
 
