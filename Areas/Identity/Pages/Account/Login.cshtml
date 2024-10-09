@@ -47,34 +47,57 @@
         </section>
     </div>
     <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
+        <div class="row">
+            <div class="col-sm-8 col-lg-6 offset-sm-2">
+                
+                <section>
+                    <h1 class="mb-4 mt-2">@ViewData["Title"]</h1>
+                    <div class="demo-logins">
+                        <h4>Login as Demo User</h4>
+                        @*  <div class="row d-flex gy-2 mb-2 justify-content-center">
+                        <div class="col"> *@
+                        <form id="account" method="post">
+                            <input hidden asp-for="Input.Email" value="btadmin1@bugtracker.com" />
+                            <input hidden asp-for="Input.Password" value="Abc&123!" />
+                            <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-2"><i class="bi bi-key me-1"></i>Demo Admin Login</button>
+                        </form>
+                        @*    </div>
+                        <br />
+                        </div> *@
+
+                        @* <div class="row d-flex gy-2 mb-2 justify-content-start">
+                        <div class="col"> *@
+                        <form id="account" method="post">
+                            <input hidden asp-for="Input.Email" value="ProjectManager1@bugtracker.com" />
+                            <input hidden asp-for="Input.Password" value="Abc&123!" />
+                            <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-2"><i class="bi bi-watch me-1"></i>Demo Project Manager Login</button>
+                        </form>
+                        @*       </div>
+                        <br />
+                        </div> *@
+
+                        @*       <div class="row d-flex gy-2 mb-2 justify-content-start">
+                        <div class="col"> *@
+                        <form id="account" method="post">
+                            <input hidden asp-for="Input.Email" value="Developer1@bugtracker.com" />
+                            <input hidden asp-for="Input.Password" value="Abc&123!" />
+                            <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-2"><i class="bi bi-code-slash me-1"></i>Demo Developer Login</button>
+                        </form>
+                        @*          </div>
+                        <br />
+                        </div> *@
+
+                        @*  <div class="row d-flex gy-2 mb-2 justify-content-start">
+                        <div class="col"> *@
+                        <form id="account" method="post">
+                            <input hidden asp-for="Input.Email" value="Submitter1@bugtracker.com" />
+                            <input hidden asp-for="Input.Password" value="Abc&123!" />
+                            <button id="login-submit" type="submit" class="w-100 btn btn-primary mb-2"><i class="bi bi-input-cursor-text me-1"></i>Demo Submitter Login</button>
+                        </form>
+                        @*     </div>
+                        <br />
+                        </div> *@
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
     </div>
 </div>
 
