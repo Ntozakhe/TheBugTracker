@@ -1,8 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+  
+    Layout = "~/Views/Shared/_Layout Lander .cshtml";
 }
+<div class="row align-items-center h-100 ">
+    <div class="col-12 col-md-8 col-lg-8 order-last order-md-first">
+        <div class="ms-5">
+            <h1 class="heroTitle">
+                The <span class="texthighlight">Bug Tracker</span> Application
+            </h1>
+            <div class="subtitle">
+                This project is a full-stack web application which is a multitenant ticket tracking system using ASP.NET Core MVC and PostgreSQL.
+                Enables companies to track projects and the lifecycle of the trouble tickets within. Implemented user and
+                role-based security to establish separation of duties.<br><br><strong>Built with pride using cutting edge tech:</strong>
+                <br><i class="devicon-dot-net-plain-wordmark colored icon"></i>
+                <i class="devicon-csharp-plain-wordmark colored icon"></i>
+                <i class="devicon-postgresql-plain-wordmark colored icon"></i>
+                <i class="devicon-bootstrap-plain-wordmark colored icon"></i>
+                <i class="devicon-heroku-plain-wordmark colored icon"></i>
+            </div>
+            
+        </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-4 text-center">
+        <img src="/img/Bug Tracker.png" class="img-fluid">
+        <div class="text-center mt-5">
+            <a class="btn btn-lg btn-primary rounded-pill w-auto" asp-area="Identity" asp-page="/Account/Login">Sign In</a>
+        </div>
+    </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
