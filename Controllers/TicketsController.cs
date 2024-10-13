@@ -384,7 +384,7 @@ namespace TheBugTracker.Controllers
             {
                 await _ticketService.ArchiveTicketAsync(ticket);
             }
-            return RedirectToAction(nameof(AllTickets));
+            return RedirectToAction(nameof(ArchivedTickets));
         }
 
         [Authorize(Roles = $"{nameof(Roles.Administrator)},{nameof(Roles.ProjectManager)}")]
@@ -416,7 +416,7 @@ namespace TheBugTracker.Controllers
                 ticket.Archived = false;
                 await _ticketService.UpdateTicketAsync(ticket);
             }
-            return RedirectToAction(nameof(AllTickets));
+            return RedirectToAction(nameof(ArchivedTickets));
         }
 
         private async Task<bool> TicketExists(int id)

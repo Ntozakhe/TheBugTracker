@@ -233,7 +233,7 @@ namespace TheBugTracker.Controllers
                     throw;
                 }
                 //Redirect to All Projects
-                return RedirectToAction("Index");
+                return RedirectToAction("AllProjects");
             }
             return RedirectToAction("Create");
         }
@@ -329,7 +329,7 @@ namespace TheBugTracker.Controllers
 
             await _projectService.ArchiveProjectAsync(project);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ArchivedProjects));
         }
 
         [Authorize(Roles = $"{nameof(Roles.Administrator)},{nameof(Roles.ProjectManager)}")]
@@ -362,7 +362,7 @@ namespace TheBugTracker.Controllers
 
             await _projectService.RestoreProjectAsync(project);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ArchivedProjects));
         }
 
         private async Task<bool> ProjectExists(int id)
